@@ -1,46 +1,46 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     orderItems: [
       {
-        productId: {
+        id: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          ref: 'Product',
           required: true,
         },
-        productName: {type: String,required: true},
-        price: {type: Number,required: true},
-        quantity: { type: Number, required: true},
+        name: { type: String, required: true },
+        price: { type: Number, required: true },
+        quantity: { type: Number, required: true },
       },
     ],
     shippingAddress: {
-      firstName: {type: String,required: true},
-      lastName: {type: String,required: true},
-      companyName: {type: String},
-      additionalInfo: {type: String},
-      phone: {type: String,required: true},
-      email: {type: String,required: true},
-      address: { type: String, required: true},
-      city: { type: String, required: true},
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+      companyName: { type: String },
+      additionalInfo: { type: String },
+      phone: { type: String, required: true },
+      email: { type: String, required: true },
+      address: { type: String, required: true },
+      city: { type: String, required: true },
       // province: {type: String, required: true},
-      zipCode: {type: String, required: true},
-      country: {type: String, required: true},
+      zipCode: { type: String, required: true },
+      country: { type: String, required: true },
     },
-    totalAmount: { type: Number, required: true }, 
+    totalAmount: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["Pending", "Processing", "Shipped", "Delivered"],
-      default: "Pending",
+      enum: ['Pending', 'Processing', 'Shipped', 'Delivered'],
+      default: 'Pending',
     },
     paymentMethod: {
       type: String,
-      enum: ["cod", "bank","Direct Bank Transfer", "Cash on Delivery"],
+      enum: ['cod', 'bank', 'Direct Bank Transfer', 'Cash on Delivery'],
       required: true,
     },
     orderNumber: { type: String, unique: true },
@@ -50,15 +50,15 @@ const OrderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-OrderSchema.pre("save", async function (next) {
+OrderSchema.pre('save', async function (next) {
   if (!this.orderNumber) {
     try {
       const lastOrder = await mongoose
-        .model("Order")
+        .model('Order')
         .findOne()
         .sort({ createdAt: -1 });
       let newOrderNumber = 1000;
-      let prefix = "A";
+      let prefix = 'A';
 
       if (lastOrder && lastOrder.orderNumber) {
         const match = lastOrder.orderNumber.match(/^([A-Z])(\d+)$/);
@@ -83,4 +83,4 @@ OrderSchema.pre("save", async function (next) {
   next();
 });
 
-module.exports = mongoose.model("Order", OrderSchema);
+module.exports = mongoose.model('Order', OrderSchema);

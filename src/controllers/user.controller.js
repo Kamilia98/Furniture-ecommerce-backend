@@ -121,13 +121,12 @@ const changePassword = asyncWrapper(async (req, res, next) => {
     if (isSamePassword) {
       return next(
         new AppError(
-          "New password must be different from the old one",
+          'New password must be different from the old one',
           400,
           httpStatusText.FAIL
         )
       );
     }
-
   }
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);
@@ -212,9 +211,9 @@ const editUser = asyncWrapper(async (req, res, next) => {
 
 const toggleFavourite = asyncWrapper(async (req, res, next) => {
   const userId = req.user._id;
-  const productId = req.body.productId;
+  const id = req.body.id;
 
-  if (!mongoose.Types.ObjectId.isValid(productId)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return next(new AppError('Invalid product ID', 400));
   }
 
@@ -223,7 +222,7 @@ const toggleFavourite = asyncWrapper(async (req, res, next) => {
     return next(new AppError('User Not found', 404, httpStatusText.NOT_FOUND));
   }
 
-  const index = user.favourites.indexOf(productId);
+  const index = user.favourites.indexOf(id);
   let isFavourite;
 
   if (index !== -1) {
@@ -231,7 +230,7 @@ const toggleFavourite = asyncWrapper(async (req, res, next) => {
     user.favourites.splice(index, 1);
   } else {
     isFavourite = true;
-    user.favourites.push(productId);
+    user.favourites.push(id);
   }
 
   await user.save();
@@ -240,7 +239,7 @@ const toggleFavourite = asyncWrapper(async (req, res, next) => {
   const updatedUser = await User.findById(userId)
     .populate({
       path: 'favourites',
-      select: '_id productName productSubtitle colors',
+      select: '_id name subtitle colors',
     })
     .lean();
 
@@ -250,9 +249,9 @@ const toggleFavourite = asyncWrapper(async (req, res, next) => {
 
     return {
       _id: product._id,
-      productName: product.productName,
-      productSubtitle: product.productSubtitle,
-      productImage: firstImage,
+      name: product.name,
+      subtitle: product.subtitle,
+      image: firstImage,
     };
   });
 
@@ -268,7 +267,7 @@ const getFavourites = asyncWrapper(async (req, res, next) => {
   const user = await User.findById(userId)
     .populate({
       path: 'favourites',
-      select: '_id productName productSubtitle colors',
+      select: '_id name subtitle colors',
     })
     .lean();
 
@@ -282,9 +281,9 @@ const getFavourites = asyncWrapper(async (req, res, next) => {
 
     return {
       _id: product._id,
-      productName: product.productName,
-      productSubtitle: product.productSubtitle,
-      productImage: firstImage,
+      name: product.name,
+      subtitle: product.subtitle,
+      image: firstImage,
     };
   });
 
