@@ -39,14 +39,7 @@ const paymentRouter = require('./src/routes/payment.routes');
 connectDB();
 
 // Middlewares
-// CORS Configuration
-const frontendUrl = 'https://furniture-ecommerce-frontend.vercel.app'; // Add the frontend URL
 app.use(cors()); // allows all origins
-
-// Optionally, add preflight handler
-app.options('*', cors());
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
