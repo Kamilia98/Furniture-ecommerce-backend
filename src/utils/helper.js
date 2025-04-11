@@ -1,0 +1,1 @@
+exports.sampleHelper = () => "Helper Function";
