@@ -166,7 +166,7 @@ const getFilteredProducts = async (
           $map: {
             input: '$categories',
             as: 'category',
-            in: { _id: '$$category._id', catName: '$$category.catName' },
+            in: { _id: '$$category._id', name: '$$category.name' },
           },
         },
       },
@@ -221,7 +221,7 @@ const projectCategoryNames = () => ({
     $map: {
       input: '$categories',
       as: 'category',
-      in: { _id: '$$category._id', catName: '$$category.catName' },
+      in: { _id: '$$category._id', name: '$$category.name' },
     },
   },
 });
@@ -243,7 +243,7 @@ const getProductById = asyncWrapper(async (req, res, next) => {
     .select(
       '_id name subtitle price date sale categories description brand colors additionalInformation'
     )
-    .populate('categories', 'catName')
+    .populate('categories', 'name')
     .lean();
 
   if (!product) {
@@ -341,7 +341,7 @@ const getProductForComparison = asyncWrapper(async (req, res, next) => {
     .select(
       '_id name subtitle productImages price quantity date sale categories description colors sizes brand additionalInformation'
     )
-    .populate('categories', 'catName')
+    .populate('categories', 'name')
     .lean();
 
   if (!product) {
@@ -372,7 +372,7 @@ const getSearchProducts = asyncWrapper(async (req, res, next) => {
       { categories: { $in: categoryIds } },
     ],
   })
-    .populate('categories', 'catName')
+    .populate('categories', 'name')
     .lean();
 
   if (!products.length) {
@@ -387,7 +387,7 @@ const getSearchProducts = asyncWrapper(async (req, res, next) => {
 
 async function getCategoryIds(query) {
   const categories = await require('../models/category.model')
-    .find({ catName: { $regex: query, $options: 'i' } })
+    .find({ name: { $regex: query, $options: 'i' } })
     .select('_id')
     .lean();
   return categories.map((cat) => cat._id);

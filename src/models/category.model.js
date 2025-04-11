@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const CategorySchema = new mongoose.Schema({
-  catName: { type: String, required: true },
+  name: { type: String, required: true },
   description: { type: String },
   image: { type: String },
 });
-module.exports = mongoose.model("Category", CategorySchema);
+module.exports = mongoose.model('Category', CategorySchema);
