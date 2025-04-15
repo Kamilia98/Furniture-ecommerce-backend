@@ -23,7 +23,7 @@ const getOrders = asyncWrapper(async (req, res, next) => {
   const skip = (page - 1) * limit;
 
   const orders = await Order.find({ userId })
-    .select("orderNumber status totalAmount createdAt")
+    .select("orderNumber status orderItems totalAmount createdAt")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);

@@ -11,6 +11,8 @@ const verifyToken = require('../middlewares/auth.middleware');
 
 // router.use(limiter);
 
-router.post('/payment', verifyToken, paymentController.createPaymentIntent);
+router
+  .route('/payment')
+  .post(verifyToken, paymentController.createPaymentIntent);
 
 module.exports = router;

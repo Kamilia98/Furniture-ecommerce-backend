@@ -39,7 +39,7 @@ const paymentRouter = require('./src/routes/payment.routes');
 connectDB();
 
 // Middlewares
-app.use(cors()); // allows all origins
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
